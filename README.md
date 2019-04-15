@@ -1,7 +1,8 @@
-## X-Intput/Output
+## X-Intput/Output - 一组扩展IO及字符串处理的C函数
 
 ### 起因
-好多年前，第一次看到[ChaN](http://elm-chan.org)前辈写的[*xprintf()*](http://elm-chan.org/fsw/strf/xprintf.html)，被惊艳到，简单的函数，优雅、好用。后来，我随着使用，加了一些功能。再后来，用C99标准重构一次，就是现在的版本。
+
+好多年前，第一次看到[ChaN](http://elm-chan.org)前辈写的[*xprintf()*](http://elm-chan.org/fsw/strf/xprintf.html)，被惊艳到，简单的函数，优雅、好用。后来，我随着使用，加了一些功能。再后来，我用C99标准重构一次，就是[现在的版本](https://github.com/roocky-lab/x-io)。
 
 ### 功能
 
@@ -13,6 +14,36 @@
 - *xsplit()*: 字符串分割函数
 - *xatol()*: 字符串转长整型，自动判断所属进制(二进制/十进制/十六进制)
 - *xatoul()*: 同上，无符号长整型版本
+
+### 例子
+
+每个函数功能独立，以*main.c*中附带的*xhexdump()*使用为例：
+
+```c
+#include <stdlib.h>  /* for rand() */
+#include "xio/xio.h" /* for xhexdump */
+
+int main() {
+    /* 生成一组测试数据 */
+    char data[64];
+    for (int i = 0; i < sizeof(data); ++i)
+        data[i] = (char)rand();
+
+    /* 调用xhexdump格式化打印 */
+    xhexdump((unsigned long)data, data, sizeof(data), sizeof(data[0]));
+    return 0;
+}
+```
+
+调用附带的Makefile运行，效果如下：
+```shell
+$ make run
+./xio_test
+7ffd39671e20  67 c6 69 73 51 ff 4a ec 29 cd ba ab f2 fb e3 46  |g.isQ.J.)......F|
+7ffd39671e30  7c c2 54 f8 1b e8 e7 8d 76 5a 2e 63 33 9f c9 9a  ||.T.....vZ.c3...|
+7ffd39671e40  66 32 0d b7 31 58 a3 5a 25 5d 05 17 58 e9 5e d4  |f2..1X.Z%]..X.^.|
+7ffd39671e50  ab b2 cd c6 9b b4 54 11 0e 82 74 41 21 3d dc 87  |......T...tA!=..|
+```
 
 ### FAQ
 
@@ -49,3 +80,7 @@
     - 单片机开发，通常没有标准 *stdout、stdin* , 本来*printf()*、 *scanf()*  等也不会直接使用
     - 标准库 *scanf()、gets()* 等函数原本就存在内存泄露风险，任何平台都不推荐再使用
     - 补充一些实用功能： *xpause()、xsplit()、xatol()、xatoul()*、*xhexdump()*
+
+------
+
+GitHub地址：https://github.com/roocky-lab/x-io
